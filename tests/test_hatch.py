@@ -25,4 +25,3 @@ def hatch_build_target(target, *args, check=True):
 def test_build(new_project):
     directory = new_project(name='project-a', version='0.1.0', dependencies=["requests"])
     hatch_build_target("conda")
-    breakpoint()
