@@ -18,3 +18,21 @@ path = "hatch_conda_build/__version__.py"
 
 [project.entry-points.hatch]
 conda = "hatch_conda_build.hooks"
+
+[tool.hatch.envs.test]
+dependencies = [
+  "build",
+  "ruff",
+  "black",
+  "pytest",
+]
+
+[tool.hatch.envs.test.scripts]
+check = [
+  "black --check --diff .",
+  "ruff check .",
+]
+format = [
+  "black .",
+]
+test = "pytest"
