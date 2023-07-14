@@ -1,0 +1,20 @@
+[project]
+name = "hatch_conda_build"
+description = 'conda-build using pyproject.toml'
+dynamic = ["version"]
+requires-python = ">=3.8"
+readme = "README.md"
+dependencies = [
+   "grayskull",
+   "hatchling",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "hatch_conda_build/__version__.py"
+
+[project.entry-points.hatch]
+conda = "hatch_conda_build.hooks"

@@ -1,0 +1,16 @@
+[project]
+name = "package-a"
+description = 'test package-a package'
+version = "0.0.1"
+requires-python = ">=3.8"
+readme = "README.md"
+dependencies = [
+   "requests"
+]
+
+[build-system]
+requires = [
+  "hatchling",
+  "hatch_conda_build",
+]
+build-backend = "hatchling.build"
