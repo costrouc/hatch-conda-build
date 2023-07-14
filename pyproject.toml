@@ -1,5 +1,5 @@
 [project]
-name = "hatch_conda_build"
+name = "hatch-conda-build"
 description = 'conda-build using pyproject.toml'
 dynamic = ["version"]
 requires-python = ">=3.8"
