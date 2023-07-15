@@ -66,9 +66,11 @@ def construct_meta_yaml_from_pyproject(metadata):
     conda_meta['test'] = {}
 
     # about
-    conda_meta['about'] = {
+    if 'homepage' in full_metadata['project'].get('urls', {}):
+        conda_meta['about']['home'] = full_metadata['project']['urls']['homepage']
 
-    }
+    if 'description' in full_metadata['project']:
+        conda_meta['about']['summary'] = full_metadata['project']['description']
 
     return conda_meta
 
@@ -80,8 +82,7 @@ def conda_build(
     channels: typing.List[str],
     default_numpy_version: str,
 ):
-    print(meta_config)
-
+    print('meta.yaml: ' meta_config)
     conda_meta_filename = build_directory / "meta.yaml"
     with conda_meta_filename.open("w") as f:
         json.dump(meta_config, f)
@@ -89,7 +90,7 @@ def conda_build(
     command = ['conda-build', 'build', str(build_directory), '--output-folder', str(output_directory), '--override-channels', '--numpy', default_numpy_version]
     for channel in channels:
         command += ['--channel', channel]
-    print(command)
+    print('command', command)
 
     import sys
     subprocess.run(command, check=True, stderr=sys.stderr, stdout=sys.stdout)

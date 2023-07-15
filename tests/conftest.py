@@ -36,7 +36,11 @@ build-backend = "hatchling.build"
 [project]
 name = "project-a"
 version = "0.1.0"
+description = "A description"
 dependencies = {json.dumps(dependencies)}
+
+[project.urls]
+homepage = "https://example.org"
 
 [tool.hatch.build.targets.conda]
 channels = ["conda-forge"]
