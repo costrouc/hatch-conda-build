@@ -86,7 +86,7 @@ def conda_build(
     with conda_meta_filename.open("w") as f:
         json.dump(meta_config, f)
 
-    command = ['conda-build', 'build', str(build_directory), '--output-folder', str(output_directory), '--override-channels', '--numpy', default_numpy_version, '--debug']
+    command = ['conda-build', 'build', str(build_directory), '--output-folder', str(output_directory), '--override-channels', '--numpy', default_numpy_version]
     for channel in channels:
         command += ['--channel', channel]
     print(command)
