@@ -15,16 +15,22 @@ build-backend = "hatchling.build"
 Additionally `conda-build` must be in your current path when running a
 hatch build.
 
-### Configuration
+### Options
 
-Additional optional configuration settings may be set within the
-`pyproject.toml`.
+Additional builder configuration can be set in the following toml
+header.
 
 ```toml
 [tool.hatch.build.targets.conda]
-channels = ["conda-forge"]
-default_numpy_version = "1.22"
+...
 ```
+
+Following table contains available customization of builder behavior. 
+
+| Option                | Type      | Default         | Description                                 |
+|:----------------------|:----------|:----------------|:--------------------------------------------|
+| channels              | list[str] | ['conda-forge'] | Channels used for package build and testing |
+| default_numpy_version | str       | "1.22"          | Default numpy version for build             |
 
 ## Building Conda Package
 
@@ -38,3 +44,6 @@ $ hatch build -t conda
 ...
 ```
 
+## License
+
+Plugin hatch-conda-build is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
