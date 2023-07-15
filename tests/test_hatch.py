@@ -4,21 +4,10 @@ import subprocess
 import pytest
 
 
-def run(*args, check=True):
-    process = subprocess.run(
-        [sys.executable, "-m", *args],  # noqa: S603
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        encoding="utf-8",
-    )
-    if check and process.returncode:
-        pytest.fail(process.stdout)
-
-    return process.stdout
-
-
-def hatch_build_target(target, *args, check=True):
-    return run("hatch", "build", "-t", target, *args, check=check)
+def hatch_build_target(target: str):
+    subprocess.run([
+        "hatch", "build", "-t", target
+    ], capture_output=False, check=True)
 
 
 @pytest.mark.slow()

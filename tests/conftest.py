@@ -38,13 +38,8 @@ name = "project-a"
 version = "0.1.0"
 dependencies = {json.dumps(dependencies)}
 
-[project.urls]
-"Homepage" = "https://github.com/pypa/sampleproject"
-"Bug Tracker" = "https://github.com/pypa/sampleproject/issues"
-
 [tool.hatch.build.targets.conda]
-a = 1
-b = "2"
+channels = ["conda-forge"]
     """,
             encoding="utf-8",
         )
