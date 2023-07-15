@@ -111,7 +111,7 @@ class CondaBuilder(BuilderInterface):
         directory = pathlib.Path(directory)
 
         conda_meta = construct_meta_yaml_from_pyproject(self.metadata)
-        target_config = self.build_config['targets']['conda']
+        target_config = self.build_config.get('targets', {}).get('conda', {})
 
         with tempfile.TemporaryDirectory() as tmpdir:
             tmpdir = pathlib.Path(tmpdir)
