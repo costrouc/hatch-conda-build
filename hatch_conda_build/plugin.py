@@ -1,4 +1,5 @@
 import json
+import tomllib
 import shutil
 import typing
 import pathlib
@@ -12,6 +13,19 @@ from hatchling.builders.plugin.interface import BuilderInterface
 from hatch_conda_build.config import CondaBuilderConfig
 
 
+def normalize_pypi_packages(packages: typing.List[str]):
+    _packages = []
+    for package in packages:
+        if 'hatch-conda-build' in package:
+            continue
+
+        if '@' in package:
+            package = package.split('@')[0]
+
+        _packages.append(package)
+    return _packages
+
+
 def construct_meta_yaml_from_pyproject(metadata):
     py_meta = metadata.core_raw_metadata
     conda_meta = collections.defaultdict(dict)
@@ -21,7 +35,10 @@ def construct_meta_yaml_from_pyproject(metadata):
     conda_meta['package']['version'] = metadata.version
 
     # source
-    conda_meta['source']['path'] = str(pathlib.Path(metadata._project_file).parent)
+    pyproject_toml = pathlib.Path(metadata._project_file)
+    conda_meta['source']['path'] = str(pyproject_toml.parent)
+    with pyproject_toml.open('rb') as f:
+        full_metadata = tomllib.load(f)
 
     # build
     conda_meta['build']['number'] = 0
@@ -29,12 +46,21 @@ def construct_meta_yaml_from_pyproject(metadata):
     conda_meta['build']['script'] = 'python -m pip install --no-deps --ignore-installed .'
 
     # requirements
+    if 'requires-python' in py_meta:
+        python_spec = f"python {py_meta['requires-python']}"
+    else:
+        python_spec = "python"
+
     conda_meta['requirements']['build'] = []
+
     conda_meta['requirements']['host'] = [
+        python_spec,
         'pip',
-        'hatchling',
-    ]
-    conda_meta['requirements']['run'] = py_meta['dependencies']
+    ] + normalize_pypi_packages(full_metadata['build-system']['requires'])
+
+    conda_meta['requirements']['run'] = [
+        python_spec,
+    ] + py_meta['dependencies']
 
     # test
     conda_meta['test'] = {}
@@ -54,6 +80,8 @@ def conda_build(
     channels: typing.List[str],
     default_numpy_version: str,
 ):
+    print(meta_config)
+
     conda_meta_filename = build_directory / "meta.yaml"
     with conda_meta_filename.open("w") as f:
         json.dump(meta_config, f)
@@ -66,7 +94,7 @@ def conda_build(
     import sys
     subprocess.run(command, check=True, stderr=sys.stderr, stdout=sys.stdout)
 
-    package_name = f"{meta_config['package']['name']}-{meta_config['package']['version']}-{meta_config['build']['number']}.tar.bz2"
+    package_name = f"{meta_config['package']['name']}-{meta_config['package']['version']}-py_{meta_config['build']['number']}.tar.bz2"
     return output_directory / 'noarch' / package_name
 
 
