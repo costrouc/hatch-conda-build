@@ -82,7 +82,7 @@ def conda_build(
     channels: typing.List[str],
     default_numpy_version: str,
 ):
-    print('meta.yaml: ' meta_config)
+    print('meta.yaml: ', meta_config)
     conda_meta_filename = build_directory / "meta.yaml"
     with conda_meta_filename.open("w") as f:
         json.dump(meta_config, f)
