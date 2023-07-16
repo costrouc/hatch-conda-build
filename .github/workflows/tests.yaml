@@ -14,6 +14,7 @@ jobs:
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
+          activate-environment: test
           python-version: "3.10"
 
       - name: Install required packages
@@ -30,7 +31,8 @@ jobs:
 
       - name: Run checks
         shell: base -el {0}
-        run: hatch env run -e test check
+        run: |
+          hatch env run -e test check
 
       - name: Run tests
         shell: base -el {0}
