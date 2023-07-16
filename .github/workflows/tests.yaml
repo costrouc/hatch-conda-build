@@ -34,5 +34,5 @@ jobs:
         run: hatch env run -e test check
 
       - name: Run tests
-        shell: base -el {0}
+        shell: bash -el {0}
         run: pytest -v
