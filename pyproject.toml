@@ -36,4 +36,3 @@ check = [
 format = [
   "black .",
 ]
-test = "pytest"
